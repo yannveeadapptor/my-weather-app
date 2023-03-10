@@ -7,8 +7,8 @@ interface HelloWorldProps{
 
 function HelloWorld(props: HelloWorldProps){
   return (
-    <View>
-      <Text>Hello</Text>
+    <View style={helloWorldStyles.container}>
+      <Text style={helloWorldStyles.text}>Hello</Text>
       {props.shouldRenderWorld && <Text>World</Text>}
     </View>
   );
@@ -18,7 +18,7 @@ function HelloWorld(props: HelloWorldProps){
 export default function App() {
   return (
     <View style={styles.container}>
-      <HelloWorld shouldRenderWorld={true}/>
+      <HelloWorld shouldRenderWorld={false} />
       <StatusBar style="auto" />
     </View>
   );
@@ -32,3 +32,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+const helloWorldStyles = StyleSheet.create({
+  text:{
+    width:"100%",
+    textAlign:"left",
+    fontWeight:"bold",
+    fontSize:30,
+  },
+  container:{
+    width:"100%",
+    alignItems:"center",
+    padding:15
+  }
+})
