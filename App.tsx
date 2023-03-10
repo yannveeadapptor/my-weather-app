@@ -7,23 +7,12 @@ import { images } from './theme/images';
 import { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { colors } from './theme/colors';
 import { metrics } from './theme/metrics';
+import { useIsMounted } from './utils/common-hooks';
 
 interface HelloWorldProps {
   shouldRenderWorld: boolean;
 }
-export function useIsMounted() {
-  const isMounted = useRef(false);
 
-  useEffect(() => {
-    isMounted.current = true;
-
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-  return useCallback(() => isMounted.current, []);
-}
 
 function HelloWorld(props: HelloWorldProps) {
   return (
