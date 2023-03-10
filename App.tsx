@@ -11,6 +11,19 @@ import { metrics } from './theme/metrics';
 interface HelloWorldProps {
   shouldRenderWorld: boolean;
 }
+export function useIsMounted() {
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    isMounted.current = true;
+
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  return useCallback(() => isMounted.current, []);
+}
 
 function HelloWorld(props: HelloWorldProps) {
   return (
@@ -148,6 +161,39 @@ function ShowRandomNumber() {
 }
 
 
+function ShowRandomNumber2() {
+  const [result, setResult] = useState<number | undefined>();
+
+  const isMounted = useIsMounted();
+
+  useEffect(() => {
+    if (result == null) {
+      fetchRandomNumber()
+        .then((res) => {
+          if (isMounted()) {
+            setResult(res);
+          }
+        })
+        .catch((error) => {
+          if (isMounted()) {
+            setResult(undefined);
+          }
+          console.warn(error);
+        });
+    }
+  }, [result, setResult, isMounted]);
+
+  const onPress = useCallback(() => {
+    setResult(undefined);
+  }, [setResult]);
+
+  if (result == null) {
+    return <Text>Waiting on a number</Text>;
+  }
+
+  return <Text onPress={onPress}>{`Random number: ${result}`}</Text>;
+}
+
 function Counter() {
   const [counter, setCounter] = useState(0);
   useEffect(() => {
@@ -169,7 +215,8 @@ export default function App() {
   const [showDialog, setShowDialog] = useState(false);
   return (
     <View style={styles.container}>
-      <ShowRandomNumber/>
+
+      <ShowRandomNumber2/>
        <MyForm />
        <Counter />
        <Accumulator bigArray={[...Array(100000).keys()]} />
