@@ -4,6 +4,8 @@ import { Modal } from './components/modal-dialog';
 import { OptionsList } from './components/options-list';
 import { SimpleButton } from './components/simple-button';
 import { images } from './theme/images';
+import { ReactElement, useCallback, useMemo, useState } from "react";
+
 
 interface HelloWorldProps{
   shouldRenderWorld : boolean;
@@ -18,14 +20,40 @@ function HelloWorld(props: HelloWorldProps){
   );
 }
 
+function Accumulator(props: AccumulatorProps): ReactElement<AccumulatorProps> {
+  const allAdded = useMemo(
+    // Reduce will take an array, and turn it into a single value of the same type. In this case, it's summing all numbers in the array
+    () => props.bigArray.reduce((a, b) => a + b, 0),
+    // The dependency array says only recalculate when props.bigArray changes
+    [props.bigArray],
+  );
+
+  return <Text>{allAdded}</Text>;
+}
+function Counter() {
+  const [counter, setCounter] = useState(0);
+
+  const onPress = useCallback(() => setCounter((currentValue) => currentValue + 1), [setCounter]);
+
+  return <Text onPress={onPress}>{`Count: ${counter}`}</Text>;
+}
+
+interface AccumulatorProps {
+  bigArray: number[];
+}
+
+// Declare an array from 0 to 99,999
+<Accumulator bigArray={[...Array(100000).keys()]} />
 
 
 export default function App() {
+  const [showDialog, setShowDialog] = useState(false);
   return (
     <View style={styles.container}>
-      <SimpleButton isDisabled={true} title="Do the thing!" />
+      <SimpleButton title="Show Modal" onPress={() => setShowDialog(true)} isDisabled={false} />
       <HelloWorld shouldRenderWorld={true} />
       <StatusBar style="auto" />
+      <Counter />
       <OptionsList
          title="Settings"
          rows={[
@@ -35,7 +63,7 @@ export default function App() {
            { title: 'Screen Time', leftIcon: images.favIcon },
          ]}
        />
-<Modal
+        <Modal
          title="Custom Success"
          content={{
            type: 'custom',
@@ -49,7 +77,8 @@ export default function App() {
              />
            ),
          }}
-         show={true}
+         show={showDialog}
+         dismissButton = {{ onDismiss: () => setShowDialog(false), title: 'dismiss'}}
        />
     </View>
   );
