@@ -19,4 +19,4 @@ export const metrics = {
         large:45,
         xl:50
     }
-}
+};

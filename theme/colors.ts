@@ -2,7 +2,7 @@ const white = '#ffffff';
 
 export const colors = {
     blankedOutBackground:'#18181888',
-    standardBaclground:white,
+    standardBackground:white,
     cancelText : 'red',
     title: 'grey',
     veryLightGrey:'#DFDFDF',
@@ -11,4 +11,4 @@ export const colors = {
     buttonRed:'red',
     buttonWhite:white,
     bodyTextColor:'black'
-}
+};
