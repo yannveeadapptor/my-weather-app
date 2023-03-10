@@ -9,7 +9,7 @@ function HelloWorld(props: HelloWorldProps){
   return (
     <View style={helloWorldStyles.container}>
       <Text style={helloWorldStyles.text}>Hello</Text>
-      {props.shouldRenderWorld && <Text>World</Text>}
+      {props.shouldRenderWorld && <Text style={helloWorldStyles.text}>World</Text>}
     </View>
   );
 }
@@ -18,7 +18,7 @@ function HelloWorld(props: HelloWorldProps){
 export default function App() {
   return (
     <View style={styles.container}>
-      <HelloWorld shouldRenderWorld={false} />
+      <HelloWorld shouldRenderWorld={true} />
       <StatusBar style="auto" />
     </View>
   );
@@ -39,10 +39,12 @@ const helloWorldStyles = StyleSheet.create({
     textAlign:"left",
     fontWeight:"bold",
     fontSize:30,
+    backgroundColor:'red'
   },
   container:{
     width:"100%",
     alignItems:"center",
-    padding:15
+    padding:15,
+    backgroundColor:'blue'
   }
 })
