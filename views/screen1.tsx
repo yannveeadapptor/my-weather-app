@@ -26,7 +26,7 @@ import { GlobalLoaderActions } from '../reducers/global-loader/reducer';
 <SimpleButton
          title="Load"
          onPress={() => {
-           dispatch(GlobalLoaderActions.show({ message: 'Loading' }));
+          dispatch(GlobalLoaderActions.show({ cancelMessage: 'Cancel load' }));
          } }
          style={styles.button}
          secondary isDisabled={false}       />

@@ -12,7 +12,7 @@ import { useIsMounted } from './utils/common-hooks';
 import { NavigationContainer } from '@react-navigation/native';
  import { createNativeStackNavigator } from '@react-navigation/native-stack';
  import { Provider } from 'react-redux';
- import { store } from './store';
+ import { RootState, store } from './store';
 
  import { Screen1 } from './views/screen1';
 import { Screen2 } from './views/screen2';
@@ -92,11 +92,9 @@ const SettingsStack = createNativeStackNavigator<Tab2StackNavigatorParamList>();
    );
  }
 
-export default function App() {
-  const [showDialog, setShowDialog] = useState(false);
-
+ function RootContainer() {
+  const globalLoaderState = useAppSelector((state: RootState) => state.globalLoader);
   return (
-    <Provider store={store}>
     <NavigationContainer>
       <Tab.Navigator screenOptions={{ headerShown: false }}>
         <Tab.Screen
@@ -123,6 +121,18 @@ export default function App() {
          />
       </Tab.Navigator>
     </NavigationContainer>
+    
+  );
+
+ }
+
+
+export default function App() {
+  const [showDialog, setShowDialog] = useState(false);
+
+  return (
+    <Provider store={store}>
+ <RootContainer />
     </Provider >
   );
 
@@ -417,3 +427,7 @@ const helloWorldStyles = StyleSheet.create({
     backgroundColor: 'blue'
   }
 })
+function useAppSelector(arg0: (state: RootState) => any) {
+  throw new Error('Function not implemented.');
+}
+
