@@ -10,20 +10,25 @@ import { images } from './theme/images';
 import { metrics } from './theme/metrics';
 import { useIsMounted } from './utils/common-hooks';
 import { NavigationContainer } from '@react-navigation/native';
- import { createNativeStackNavigator } from '@react-navigation/native-stack';
- import { Provider, useSelector } from 'react-redux';
- import { RootState, store } from './store';
-
- import { Screen1 } from './views/screen1';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Provider, useSelector } from 'react-redux';
+import { persistor, RootState, store } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Screen1 } from './views/screen1';
 import { Screen2 } from './views/screen2';
 import { Screen3 } from './views/screen3';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Screen4 } from './views/screen4';
 import { Screen5 } from './views/screen5';
- 
- const Stack = createNativeStackNavigator<Tab1StackNavigatorParamList>();
+import type { StackScreenProps } from '@react-navigation/stack';
+import { Screen6 } from './views/screen6';
+import { GlobalLoader } from './components/global-loader';
+import { GlobalLoaderActions } from './reducers/global-loader/reducer';
+import { useDispatch } from 'react-redux';
 
- 
+const Stack = createNativeStackNavigator<Tab1StackNavigatorParamList>();
+
+
 interface HelloWorldProps {
   shouldRenderWorld: boolean;
 }
@@ -50,31 +55,28 @@ function Tab1Stack() {
   );
 }
 const Tab = createBottomTabNavigator();
- 
-import type { StackScreenProps } from '@react-navigation/stack';
-import { Screen6 } from './views/screen6';
-import { GlobalLoader } from './components/global-loader';
-import { GlobalLoaderActions } from './reducers/global-loader/reducer';
-import { useDispatch } from 'react-redux';
- 
- export type Tab1StackNavigatorParamList = {
-   Screen1?: never;
-   Screen2?: never;
-   Screen3: { counter: number };
- };
 
- 
+
+
+
+export type Tab1StackNavigatorParamList = {
+  Screen1?: never;
+  Screen2?: never;
+  Screen3: { counter: number };
+};
+
+
 
 export type Tab1StackScreenProps<T extends keyof Tab1StackNavigatorParamList> = StackScreenProps<
-   Tab1StackNavigatorParamList,
-   T
- >;
- 
+  Tab1StackNavigatorParamList,
+  T
+>;
+
 export type BottomTabNavigatorParamList = {
-   Tab1?: Tab1StackNavigatorParamList;
-   Tab2?: Tab2StackNavigatorParamList;
- };
- export type Tab2StackNavigatorParamList = {
+  Tab1?: Tab1StackNavigatorParamList;
+  Tab2?: Tab2StackNavigatorParamList;
+};
+export type Tab2StackNavigatorParamList = {
   Screen4?: never;
   Screen5?: never;
 };
@@ -85,19 +87,19 @@ export type Tab2StackScreenProps<T extends keyof Tab2StackNavigatorParamList> = 
 >;
 
 const SettingsStack = createNativeStackNavigator<Tab2StackNavigatorParamList>();
- 
- function Tab2Stack() {
-   return (
-     <SettingsStack.Navigator initialRouteName="Screen4" screenOptions={{ animation: 'slide_from_right' }}>
-       <SettingsStack.Screen name="Screen4" component={Screen4} options={{ title: 'Screen 4' }} />
-       <SettingsStack.Screen name="Screen5" component={Screen5} options={{ title: 'Screen 5' }} />
-     </SettingsStack.Navigator>
-   );
- }
 
- function RootContainer() {
+function Tab2Stack() {
+  return (
+    <SettingsStack.Navigator initialRouteName="Screen4" screenOptions={{ animation: 'slide_from_right' }}>
+      <SettingsStack.Screen name="Screen4" component={Screen4} options={{ title: 'Screen 4' }} />
+      <SettingsStack.Screen name="Screen5" component={Screen5} options={{ title: 'Screen 5' }} />
+    </SettingsStack.Navigator>
+  );
+}
+
+function RootContainer() {
   const globalLoaderState = useSelector((state: RootState) => state.globalLoader);
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   return (
     <NavigationContainer>
@@ -116,14 +118,14 @@ const dispatch = useDispatch();
           name="Tab3"
           component={Screen6}
 
-         options={{
+          options={{
 
-           title: 'Screen 6', 
+            title: 'Screen 6',
             // As we've not added Screen6 to a stack navigator, we won't have a
             // header shown by default, so just for Tab3 we'll allow the tab navigator's header to show
-             headerShown: true,
-           }}                  
-         />
+            headerShown: true,
+          }}
+        />
       </Tab.Navigator>
 
       <GlobalLoader
@@ -138,12 +140,12 @@ const dispatch = useDispatch();
 
       />
     </NavigationContainer>
-    
+
   );
 
 
 
- }
+}
 
 
 export default function App() {
@@ -151,7 +153,9 @@ export default function App() {
 
   return (
     <Provider store={store}>
- <RootContainer />
+      <PersistGate loading={null} persistor={persistor}>
+        <RootContainer />
+      </PersistGate>
     </Provider >
   );
 
@@ -176,7 +180,7 @@ export default function App() {
   //    surname: 'Thordendal',
   //    age: 52,
   //  };
- 
+
   //  console.log('Print a person object', person);
   //  console.log('Print a person object', person2);
   //  console.groupEnd();
@@ -192,7 +196,7 @@ export default function App() {
   // console.error("Hello Log");
   // console.warn("Hello Log warn");
 
-// console.log('Print a person object', person);
+  // console.log('Print a person object', person);
   // return (
   //   <View style={styles.container}>
 
