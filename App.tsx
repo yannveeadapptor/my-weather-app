@@ -11,7 +11,7 @@ import { metrics } from './theme/metrics';
 import { useIsMounted } from './utils/common-hooks';
 import { NavigationContainer } from '@react-navigation/native';
  import { createNativeStackNavigator } from '@react-navigation/native-stack';
- import { Provider } from 'react-redux';
+ import { Provider, useSelector } from 'react-redux';
  import { RootState, store } from './store';
 
  import { Screen1 } from './views/screen1';
@@ -53,6 +53,9 @@ const Tab = createBottomTabNavigator();
  
 import type { StackScreenProps } from '@react-navigation/stack';
 import { Screen6 } from './views/screen6';
+import { GlobalLoader } from './components/global-loader';
+import { GlobalLoaderActions } from './reducers/global-loader/reducer';
+import { useDispatch } from 'react-redux';
  
  export type Tab1StackNavigatorParamList = {
    Screen1?: never;
@@ -93,7 +96,9 @@ const SettingsStack = createNativeStackNavigator<Tab2StackNavigatorParamList>();
  }
 
  function RootContainer() {
-  const globalLoaderState = useAppSelector((state: RootState) => state.globalLoader);
+  const globalLoaderState = useSelector((state: RootState) => state.globalLoader);
+const dispatch = useDispatch();
+
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={{ headerShown: false }}>
@@ -120,9 +125,23 @@ const SettingsStack = createNativeStackNavigator<Tab2StackNavigatorParamList>();
            }}                  
          />
       </Tab.Navigator>
+
+      <GlobalLoader
+
+        show={globalLoaderState.show}
+
+        message={globalLoaderState.message}
+
+        cancelMessage={globalLoaderState.cancelMessage}
+
+        onDismiss={() => dispatch(GlobalLoaderActions.hide())}
+
+      />
     </NavigationContainer>
     
   );
+
+
 
  }
 
