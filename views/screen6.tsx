@@ -4,20 +4,22 @@ import React from 'react';
  import { SimpleButton } from '../components/simple-button';
  import { colors } from '../theme/colors';
  import { metrics } from '../theme/metrics';
+import { useTabNavigation } from './nav-hooks';
  
  export function Screen6() {
-   return (
-     <View style={styles.container}>
-       <Text style={styles.title}>Screen 6 Body</Text>
-       <SimpleButton
-               title="What will I do?"
-               onPress={() => {
-                   // Empty, for now
-               } }
-               style={styles.button} isDisabled={false}       />
-     </View>
-   );
- }
+  const navigation = useTabNavigation();
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Screen 6 Body</Text>
+      <SimpleButton
+        title="What will I do?"
+        onPress={() => {
+          navigation.navigate('Tab1');
+        } }
+        style={styles.button} isDisabled={false}      />
+    </View>
+  );
+}
  
  const styles = StyleSheet.create({
    container: {
