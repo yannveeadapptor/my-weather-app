@@ -4,15 +4,14 @@ import React, { ReactElement } from 'react';
  import { SimpleButton } from '../components/simple-button';
  import { colors } from '../theme/colors';
  import { metrics } from '../theme/metrics';
- import { Tab1StackScreenProps } from './nav-types';
+ import { Tab2StackScreenProps } from './nav-types';
  
- type Props = Tab1StackScreenProps<'Screen3'>;
+ type Props = Tab2StackScreenProps<'Screen5'>;
  
- export function Screen3(props: Props): ReactElement<Props> {
+ export function Screen5(props: Props): ReactElement<Props> {
    return (
      <View style={styles.container}>
-       <Text style={styles.title}>Screen 3 Body</Text>
-       <Text style={styles.counter}>{`Navigated here ${props.route.params.counter}`}</Text>
+       <Text style={styles.title}>Screen 5 Body</Text>
        <SimpleButton
                title="Go back"
                onPress={() => {

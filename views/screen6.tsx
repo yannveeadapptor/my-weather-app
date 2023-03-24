@@ -1,23 +1,20 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
  import { StyleSheet, Text, View } from 'react-native';
-import { SimpleButton } from '../components/simple-button';
  
+ import { SimpleButton } from '../components/simple-button';
  import { colors } from '../theme/colors';
  import { metrics } from '../theme/metrics';
- import { Tab1StackScreenProps } from './nav-types';
  
- type Props = Tab1StackScreenProps<'Screen1'>;
- 
- export function Screen1(props: Props): ReactElement {
+ export function Screen6() {
    return (
      <View style={styles.container}>
-       <Text style={styles.title}>Screen 1 Body</Text>
+       <Text style={styles.title}>Screen 6 Body</Text>
        <SimpleButton
-         title="Go To Screen 2"
-         onPress={() => {
-           props.navigation.navigate('Screen2');
-         } }
-         style={styles.button} isDisabled={false}       />
+               title="What will I do?"
+               onPress={() => {
+                   // Empty, for now
+               } }
+               style={styles.button} isDisabled={false}       />
      </View>
    );
  }

@@ -4,9 +4,9 @@ import React, { ReactElement, useRef } from 'react';
  import { SimpleButton } from '../components/simple-button';
  import { colors } from '../theme/colors';
  import { metrics } from '../theme/metrics';
- import { DefaultStackScreenProps } from './nav-types';
+ import { Tab1StackScreenProps } from './nav-types';
  
- type Props = DefaultStackScreenProps<'Screen2'>;
+ type Props = Tab1StackScreenProps<'Screen2'>;
  
  export function Screen2(props: Props): ReactElement<Props> {
    const counterRef = useRef(0);

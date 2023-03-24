@@ -12,23 +12,24 @@ import { useIsMounted } from './utils/common-hooks';
 import { NavigationContainer } from '@react-navigation/native';
  import { createNativeStackNavigator } from '@react-navigation/native-stack';
  
- import { ScreensParamList } from './views/nav-types';
+
  import { Screen1 } from './views/screen1';
 import { Screen2 } from './views/screen2';
 import { Screen3 } from './views/screen3';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Screen4 } from './views/screen4';
+import { Screen5 } from './views/screen5';
  
- const Stack = createNativeStackNavigator<ScreensParamList>();
+ const Stack = createNativeStackNavigator<Tab1StackNavigatorParamList>();
 
+ 
 interface HelloWorldProps {
   shouldRenderWorld: boolean;
 }
 
-export default function App() {
-  const [showDialog, setShowDialog] = useState(false);
-
-return (
-  <NavigationContainer>
-    <Stack.Navigator initialRouteName="Screen1" screenOptions={{ animation: 'slide_from_right' }}>
+function Tab1Stack() {
+  return (
+    <Stack.Navigator initialRouteName="Screen1">
       <Stack.Screen
         name="Screen1"
         component={Screen1}
@@ -45,8 +46,82 @@ return (
         options={{ title: 'Screen 3' }}
       />
     </Stack.Navigator>
-  </NavigationContainer>
-);
+  );
+}
+const Tab = createBottomTabNavigator();
+ 
+import type { StackScreenProps } from '@react-navigation/stack';
+import { Screen6 } from './views/screen6';
+ 
+ export type Tab1StackNavigatorParamList = {
+   Screen1?: never;
+   Screen2?: never;
+   Screen3: { counter: number };
+ };
+
+ 
+
+export type Tab1StackScreenProps<T extends keyof Tab1StackNavigatorParamList> = StackScreenProps<
+   Tab1StackNavigatorParamList,
+   T
+ >;
+ 
+export type BottomTabNavigatorParamList = {
+   Tab1?: Tab1StackNavigatorParamList;
+   Tab2?: Tab2StackNavigatorParamList;
+ };
+ export type Tab2StackNavigatorParamList = {
+  Screen4?: never;
+  Screen5?: never;
+};
+
+export type Tab2StackScreenProps<T extends keyof Tab2StackNavigatorParamList> = StackScreenProps<
+  Tab2StackNavigatorParamList,
+  T
+>;
+
+const SettingsStack = createNativeStackNavigator<Tab2StackNavigatorParamList>();
+ 
+ function Tab2Stack() {
+   return (
+     <SettingsStack.Navigator initialRouteName="Screen4" screenOptions={{ animation: 'slide_from_right' }}>
+       <SettingsStack.Screen name="Screen4" component={Screen4} options={{ title: 'Screen 4' }} />
+       <SettingsStack.Screen name="Screen5" component={Screen5} options={{ title: 'Screen 5' }} />
+     </SettingsStack.Navigator>
+   );
+ }
+
+export default function App() {
+  const [showDialog, setShowDialog] = useState(false);
+
+  return (
+    <NavigationContainer>
+      <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Screen
+          name="Tab1"
+          component={Tab1Stack}
+          options={{ title: 'Tab 1' }}
+        />
+        <Tab.Screen
+          name="Tab2"
+          component={Tab2Stack}
+          options={{ title: 'Tab 2' }}
+        />
+        <Tab.Screen
+          name="Tab3"
+          component={Screen6}
+
+         options={{
+
+           title: 'Screen 6', 
+            // As we've not added Screen6 to a stack navigator, we won't have a
+            // header shown by default, so just for Tab3 we'll allow the tab navigator's header to show
+             headerShown: true,
+           }}                  
+         />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
 
   // useEffect(() => {
   //   fetch('https://api.openweathermap.org/data/2.5/weather?lat=-32.168841&lon=115.809106&units=metric&appid=6d79331901ebcd0818c10da8d4c49ff7'

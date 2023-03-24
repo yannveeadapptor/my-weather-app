@@ -1,23 +1,23 @@
 import React, { ReactElement } from 'react';
  import { StyleSheet, Text, View } from 'react-native';
-import { SimpleButton } from '../components/simple-button';
  
+ import { SimpleButton } from '../components/simple-button';
  import { colors } from '../theme/colors';
  import { metrics } from '../theme/metrics';
- import { Tab1StackScreenProps } from './nav-types';
+ import { Tab2StackScreenProps } from './nav-types';
  
- type Props = Tab1StackScreenProps<'Screen1'>;
+ type Props = Tab2StackScreenProps<'Screen4'>;
  
- export function Screen1(props: Props): ReactElement {
+ export function Screen4(props: Props): ReactElement {
    return (
      <View style={styles.container}>
-       <Text style={styles.title}>Screen 1 Body</Text>
+       <Text style={styles.title}>Screen 4 Body</Text>
        <SimpleButton
-         title="Go To Screen 2"
-         onPress={() => {
-           props.navigation.navigate('Screen2');
-         } }
-         style={styles.button} isDisabled={false}       />
+               title="Go To Screen 5"
+               onPress={() => {
+                   props.navigation.navigate('Screen5');
+               } }
+               style={styles.button} isDisabled={false}       />
      </View>
    );
  }
