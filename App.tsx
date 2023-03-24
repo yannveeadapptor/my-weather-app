@@ -1,20 +1,134 @@
+
 import { StatusBar } from 'expo-status-bar';
+import { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Modal } from './components/modal-dialog';
 import { OptionsList } from './components/options-list';
 import { SimpleButton } from './components/simple-button';
-import { images } from './theme/images';
-import { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { colors } from './theme/colors';
+import { images } from './theme/images';
 import { metrics } from './theme/metrics';
 import { useIsMounted } from './utils/common-hooks';
+import { NavigationContainer } from '@react-navigation/native';
+ import { createNativeStackNavigator } from '@react-navigation/native-stack';
+ 
+ import { ScreensParamList } from './views/nav-types';
+ import { Screen1 } from './views/screen1';
+import { Screen2 } from './views/screen2';
+import { Screen3 } from './views/screen3';
+ 
+ const Stack = createNativeStackNavigator<ScreensParamList>();
 
 interface HelloWorldProps {
   shouldRenderWorld: boolean;
 }
 
+export default function App() {
+  const [showDialog, setShowDialog] = useState(false);
+
+return (
+  <NavigationContainer>
+    <Stack.Navigator initialRouteName="Screen1" screenOptions={{ animation: 'slide_from_right' }}>
+      <Stack.Screen
+        name="Screen1"
+        component={Screen1}
+        options={{ title: 'Screen 1' }}
+      />
+      <Stack.Screen
+        name="Screen2"
+        component={Screen2}
+        options={{ title: 'Screen 2' }}
+      />
+      <Stack.Screen
+        name="Screen3"
+        component={Screen3}
+        options={{ title: 'Screen 3' }}
+      />
+    </Stack.Navigator>
+  </NavigationContainer>
+);
+
+  // useEffect(() => {
+  //   fetch('https://api.openweathermap.org/data/2.5/weather?lat=-32.168841&lon=115.809106&units=metric&appid=6d79331901ebcd0818c10da8d4c49ff7'
+  //   )
+  //     .then((result) => {
+  //       console.log('SUCCESS', result);
+  //     })
+  //     .catch((error) => {
+  //       console.warn('FAILURE', error);
+  //     });
+  // }, []);
+  // console.group('People');
+  //  const person = {
+  //    givenName: 'Tomas',
+  //    surname: 'Haake',
+  //    age: 52,
+  //  };
+  //  const person2 = {
+  //    givenName: 'Fredrik',
+  //    surname: 'Thordendal',
+  //    age: 52,
+  //  };
+ 
+  //  console.log('Print a person object', person);
+  //  console.log('Print a person object', person2);
+  //  console.groupEnd();
+  //  console.group('Cars');
+  //  const car = {
+  //    make: 'Nissan',
+  //    model: 'Skyline',
+  //    badge: 'GT-R R32',
+  //  };
+  //  console.log('Print a car object', car);
+  //  console.groupEnd();
+
+  // console.error("Hello Log");
+  // console.warn("Hello Log warn");
+
+// console.log('Print a person object', person);
+  // return (
+  //   <View style={styles.container}>
+
+  //     <ShowRandomNumber2/>
+  //      <MyForm />
+  //      <Counter />
+  //      <Accumulator bigArray={[...Array(100000).keys()]} />
+  //     <SimpleButton title="Show Modal" onPress={() => setShowDialog(true)} isDisabled={false} />
+  //     <HelloWorld shouldRenderWorld={true} />
+  //     <StatusBar style="auto" />
+  //     <Counter />
+  //     <OptionsList
+  //       title="Settings"
+  //       rows={[
+  //         { title: 'Notifications', leftIcon: images.favIcon },
+  //         { title: 'Sounds & Haptics', leftIcon: images.favIcon },
+  //         { title: 'Focus', leftIcon: images.favIcon },
+  //         { title: 'Screen Time', leftIcon: images.favIcon },
+  //       ]}
+  //     />
+  //     <Modal
+  //       title="Custom Success"
+  //       content={{
+  //         type: 'custom',
+  //         element: (
+  //           <OptionsList
+  //             title="Settings"
+  //             rows={[
+  //               { title: 'Notifications', leftIcon: images.favIcon },
+  //               { title: 'Sounds & Haptics', leftIcon: images.favIcon },
+  //             ]}
+  //           />
+  //         ),
+  //       }}
+  //       show={showDialog}
+  //       dismissButton={{ onDismiss: () => setShowDialog(false), title: 'dismiss' }}
+  //     />
+  //   </View>
+  // );
+}
 
 function HelloWorld(props: HelloWorldProps) {
+
   return (
     <View style={helloWorldStyles.container}>
       <Text style={helloWorldStyles.text}>Hello</Text>
@@ -200,48 +314,6 @@ interface AccumulatorProps {
 }
 
 
-export default function App() {
-  const [showDialog, setShowDialog] = useState(false);
-  return (
-    <View style={styles.container}>
-
-      <ShowRandomNumber2/>
-       <MyForm />
-       <Counter />
-       <Accumulator bigArray={[...Array(100000).keys()]} />
-      <SimpleButton title="Show Modal" onPress={() => setShowDialog(true)} isDisabled={false} />
-      <HelloWorld shouldRenderWorld={true} />
-      <StatusBar style="auto" />
-      <Counter />
-      <OptionsList
-        title="Settings"
-        rows={[
-          { title: 'Notifications', leftIcon: images.favIcon },
-          { title: 'Sounds & Haptics', leftIcon: images.favIcon },
-          { title: 'Focus', leftIcon: images.favIcon },
-          { title: 'Screen Time', leftIcon: images.favIcon },
-        ]}
-      />
-      <Modal
-        title="Custom Success"
-        content={{
-          type: 'custom',
-          element: (
-            <OptionsList
-              title="Settings"
-              rows={[
-                { title: 'Notifications', leftIcon: images.favIcon },
-                { title: 'Sounds & Haptics', leftIcon: images.favIcon },
-              ]}
-            />
-          ),
-        }}
-        show={showDialog}
-        dismissButton={{ onDismiss: () => setShowDialog(false), title: 'dismiss' }}
-      />
-    </View>
-  );
-}
 
 const styles = StyleSheet.create({
   container: {

@@ -44,10 +44,9 @@ export function Modal(props:Props): ReactElement<Props> | null{
              */}
             {props.content.type === 'custom' && <View style={styles.customContentContainer}>{props.content.element}</View>}
             <SimpleButton
-              title={props.dismissButton?.title ?? 'OK'}
-              style={{ width: '50%', alignSelf: 'center' }}
-              onPress={props.dismissButton?.onDismiss}
-            />
+                    title={props.dismissButton?.title ?? 'OK'}
+                    style={{ width: '50%', alignSelf: 'center' }}
+                    onPress={props.dismissButton?.onDismiss} isDisabled={false}            />
           </View>
         </View>
       );
