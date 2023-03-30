@@ -18,6 +18,7 @@ export type Tab1StackScreenProps<T extends keyof Tab1StackNavigatorParamList> = 
   export type Tab2StackNavigatorParamList = {
     Screen4?: never;
     Screen5?: never;
+    Settings?: never;
   };
   
   export type Tab2StackScreenProps<T extends keyof Tab2StackNavigatorParamList> = StackScreenProps<

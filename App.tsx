@@ -28,7 +28,10 @@ import { useDispatch } from 'react-redux';
 import { getDeviceLocation, NO_LOCATION_PERMISSIONS_GRANTED } from './apis/location';
 import { deviceLocation, locationActions } from './reducers/location/reducer';
 import { isErrorObject } from './utils/error';
-
+import { Ionicons } from '@expo/vector-icons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontistoIcon from 'react-native-vector-icons/Fontisto';
+import { Settings } from './views/settings';
 const Stack = createNativeStackNavigator<Tab1StackNavigatorParamList>();
 
 
@@ -82,6 +85,7 @@ export type BottomTabNavigatorParamList = {
 export type Tab2StackNavigatorParamList = {
   Screen4?: never;
   Screen5?: never;
+  Settings?: never;
 };
 
 export type Tab2StackScreenProps<T extends keyof Tab2StackNavigatorParamList> = StackScreenProps<
@@ -93,12 +97,14 @@ const SettingsStack = createNativeStackNavigator<Tab2StackNavigatorParamList>();
 
 function Tab2Stack() {
   return (
-    <SettingsStack.Navigator initialRouteName="Screen4" screenOptions={{ animation: 'slide_from_right' }}>
-      <SettingsStack.Screen name="Screen4" component={Screen4} options={{ title: 'Screen 4' }} />
+    <SettingsStack.Navigator initialRouteName="Settings" screenOptions={{ animation: 'slide_from_right' }}>
+      <SettingsStack.Screen name="Settings" component={Settings} options={{ title: 'Screen 4' }} />
       <SettingsStack.Screen name="Screen5" component={Screen5} options={{ title: 'Screen 5' }} />
     </SettingsStack.Navigator>
   );
 }
+
+
 
 function RootContainer() {
   const globalLoaderState = useSelector((state: RootState) => state.globalLoader);
@@ -139,23 +145,34 @@ useEffect(() => {
         <Tab.Screen
           name="Tab1"
           component={Tab1Stack}
-          options={{ title: 'Tab 1' }}
+          options={{ 
+            title: 'Weather Tab', 
+            tabBarLabel: 'Weather',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcon name="weather-cloudy" color={color} size={size} />
+            ),
+          }}
         />
         <Tab.Screen
           name="Tab2"
           component={Tab2Stack}
-          options={{ title: 'Tab 2' }}
+          options={{ 
+            title: 'Settings Tab', 
+            tabBarLabel: 'Settings',
+            tabBarIcon: ({ color, size }) => (
+              <FontistoIcon name="player-settings" color={color} size={size} />
+            ),
+          }}
         />
         <Tab.Screen
           name="Tab3"
           component={Screen6}
-
-          options={{
-
-            title: 'Screen 6',
-            // As we've not added Screen6 to a stack navigator, we won't have a
-            // header shown by default, so just for Tab3 we'll allow the tab navigator's header to show
-            headerShown: true,
+          options={{ 
+            title: 'Favourite Tab', 
+            tabBarLabel: 'Favourites',
+            tabBarIcon: ({ color, size }) => (
+              <FontistoIcon name="favorite" color={color} size={size} />
+            ),
           }}
         />
       </Tab.Navigator>
