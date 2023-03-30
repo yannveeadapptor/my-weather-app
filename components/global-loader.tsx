@@ -4,6 +4,7 @@ import React, { ReactElement } from 'react';
  import { GlobalLoaderState } from '../reducers/global-loader/reducer';
  import { colors } from '../theme/colors';
  import { metrics } from '../theme/metrics';
+import LoadingSpinner from './loading-spinner';
  
  interface Props extends GlobalLoaderState {
    onDismiss?: () => void;
@@ -16,7 +17,7 @@ import React, { ReactElement } from 'react';
    return (
      <View style={styles.container}>
        <View style={styles.loader}>
-         <Text>LOADING...</Text>
+         <LoadingSpinner />
          {props.message != null && <Text style={styles.optionalText}>{props.message}</Text>}
          {props.cancelMessage != null && (
            <Text style={styles.cancelText} onPress={props.onDismiss}>
