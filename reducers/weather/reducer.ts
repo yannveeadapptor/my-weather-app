@@ -1,53 +1,24 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { LatLng } from 'react-native-maps';
-
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Locality } from '../location/reducer';
 import { WeatherData } from './types';
-import { fetchWeather } from '../../apis/weather';
 
-export type WeatherResponseSuccess = { type: 'success'; data: WeatherData };
-export type WeatherResponseFailure = { type: 'failure'; error: string };
-export type WeatherResponsePending = { type: 'pending' };
-export type WeatherResponse = WeatherResponseSuccess | WeatherResponseFailure | WeatherResponsePending;
-
-export interface WeatherState {
-  weatherData: Record<string, WeatherResponse>;
-}
-
-export const DEFAULT_LOCATION_STATE: WeatherState = { weatherData: {} };
-
-export const lookUpWeather = createAsyncThunk(
-  'weather/lookUpWeather',
-  async (latLong: LatLng): Promise<WeatherData> => {
-  try {
-  return fetchWeather(latLong);
- } catch (e: unknown) {
-  throw new Error(`${e}`);
-    }
-  },
-);
-
-export const weatherSlice = createSlice({
- name: 'location',
-  initialState: DEFAULT_LOCATION_STATE,
-  reducers: {},
-  extraReducers: (builder) => {
-  // Add reducers for additional action types here, and handle loading state as needed
-    builder
-      .addCase(lookUpWeather.fulfilled, (state, action) => {
-  const weatherData = action.payload;
-        state.weatherData[`${action.meta.arg}`] = { type: 'success', data: weatherData };
-      })
-      .addCase(lookUpWeather.pending, (state, action) => {
-        state.weatherData[`${action.meta.arg}`] = { type: 'pending' };
-      })
-      .addCase(lookUpWeather.rejected, (state, action) => {
-  const { message } = action.error;
-
-        state.weatherData[`${action.meta.arg}`] = { type: 'failure', error: message ?? 'Unknown error' };
-      });
-  },
+// Define a service using a base URL and expected endpoints
+export const weatherApi = createApi({
+ reducerPath: 'weather',
+  baseQuery: fetchBaseQuery({
+ baseUrl: 'https://api.openweathermap.org/data/2.5/',
+  }),
+  endpoints: (builder) => ({
+    getWeatherByLocality: builder.query<WeatherData, Locality>({
+      query: (locality) => {
+  return `weather?lat=${locality.latitude}&lon=${locality.longitude}&units=metric&appid=13512ed766d43b2287298257e6d3dfa1`;
+      },
+    }),
+  }),
 });
 
-export const weatherActions = weatherSlice.actions;
-
-export const weatherReducer = weatherSlice.reducer;
+// Export hooks for usage in function components, which are
+// auto-generated based on the defined endpoints
+export const {
+  useGetWeatherByLocalityQuery
+} = weatherApi;

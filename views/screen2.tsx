@@ -16,7 +16,7 @@ export function Screen2(props: Props): ReactElement<Props> {
   const [locality, setLocality] = useState<Locality | undefined>();
   return (
     <View style={styles.container}>
-      <MapView
+      <MapView rotateEnabled={false}
         style={styles.map}
         onLongPress={(event) => {
           setLocality(undefined);
