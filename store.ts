@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
  import { combineReducers, configureStore } from '@reduxjs/toolkit';
  import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
-import { locationReducer } from './reducers/global-loader/location/reduce';
+import { locationReducer } from './reducers/location/reducer';
  
  import { globalLoaderReducer } from './reducers/global-loader/reducer';
+import { weatherReducer } from './reducers/weather/reducer';
  
  const persistConfig = {
    key: 'root',
@@ -14,6 +15,7 @@ import { locationReducer } from './reducers/global-loader/location/reduce';
  const rootReducer = combineReducers({
     globalLoader: globalLoaderReducer,
     location: locationReducer,
+    weather: weatherReducer,
   });
  
  const persistedReducer = persistReducer(persistConfig, rootReducer);

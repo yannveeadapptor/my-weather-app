@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
  import { StyleSheet, Text, View } from 'react-native';
- import { useDispatch } from 'react-redux';
+ import { useDispatch, useSelector } from 'react-redux';
  
  import { Tab1StackScreenProps } from './nav-types';
  import { CollapsibleContainer } from '../components/collapsible-container';
@@ -8,15 +8,19 @@ import React, { ReactElement, useState } from 'react';
  import { GlobalLoaderActions } from '../reducers/global-loader/reducer';
  import { colors } from '../theme/colors';
  import { metrics } from '../theme/metrics';
+import { RootState } from '../store';
+import { WeatherData } from '../components/weather-data';
  
  type Props = Tab1StackScreenProps<'Screen1'>;
  
  export function Screen1(props: Props): ReactElement {
    const dispatch = useDispatch();
    const [collapsed, setCollapsed] = useState(false);
+   const locationState = useSelector((state: RootState) => state.location.myLocation);
    return (
-     <View style={styles.container}>
-       <Text style={styles.title}>Screen 1 Body</Text>
+    <View style={styles.container}>
+ <Text style={styles.title}>Screen 1 Body</Text>
+      {locationState?.locality && <WeatherData locationDetails={locationState.locality} />}
        <SimpleButton
          title="Load"
          onPress={() => {

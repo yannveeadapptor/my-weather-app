@@ -26,7 +26,7 @@ import { GlobalLoader } from './components/global-loader';
 import { GlobalLoaderActions } from './reducers/global-loader/reducer';
 import { useDispatch } from 'react-redux';
 import { getDeviceLocation, NO_LOCATION_PERMISSIONS_GRANTED } from './apis/location';
-import { locationActions } from './reducers/global-loader/location/reduce';
+import { locationActions } from './reducers/location/reducer';
 import { isErrorObject } from './utils/error';
 
 const Stack = createNativeStackNavigator<Tab1StackNavigatorParamList>();
