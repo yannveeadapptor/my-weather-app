@@ -1,38 +1,60 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
  import { StyleSheet, Text, View } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { SimpleButton } from '../components/simple-button';
-import { GlobalLoaderActions } from '../reducers/global-loader/reducer';
+ import { useDispatch } from 'react-redux';
  
+ import { Tab1StackScreenProps } from './nav-types';
+ import { CollapsibleContainer } from '../components/collapsible-container';
+ import { SimpleButton } from '../components/simple-button';
+ import { GlobalLoaderActions } from '../reducers/global-loader/reducer';
  import { colors } from '../theme/colors';
  import { metrics } from '../theme/metrics';
- import { Tab1StackScreenProps } from './nav-types';
  
  type Props = Tab1StackScreenProps<'Screen1'>;
  
  export function Screen1(props: Props): ReactElement {
-  const dispatch = useDispatch();
+   const dispatch = useDispatch();
+   const [collapsed, setCollapsed] = useState(false);
    return (
      <View style={styles.container}>
        <Text style={styles.title}>Screen 1 Body</Text>
        <SimpleButton
-         title="Go To Screen 2"
-         onPress={() => {
-           props.navigation.navigate('Screen2');
-         } }
-         style={styles.button} isDisabled={false}       />
-
-
-<SimpleButton
          title="Load"
          onPress={() => {
-          dispatch(GlobalLoaderActions.show({ cancelMessage: 'Cancel load' }));
+           dispatch(GlobalLoaderActions.show({ cancelMessage: 'Cancel load' }));
          } }
          style={styles.button}
          secondary isDisabled={false}       />
+       <CollapsibleContainer
+         label="Collapsible container"
+         collapsed={collapsed}
+         toggleCollapsed={() => setCollapsed((prev) => !prev)}
+       >
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <Text>Copy and paste</Text>
+         <SimpleButton
+           title="Go To Screen 2"
+           onPress={() => {
+             props.navigation.navigate('Screen2');
+           } }
+           style={styles.button} isDisabled={false}         />
+       </CollapsibleContainer>
      </View>
-
-     
    );
  }
  
