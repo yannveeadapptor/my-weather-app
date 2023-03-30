@@ -2,15 +2,13 @@ import React, { ReactElement, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import LoadingSpinner from './loading-spinner';
-import { fetchWeather } from '../apis/weather';
 import { GlobalLoaderActions } from '../reducers/global-loader/reducer';
 import { Locality } from '../reducers/location/reducer';
-import { weatherActions, WeatherResponse } from '../reducers/weather/reducer';
+import { lookUpWeather, WeatherResponse } from '../reducers/weather/reducer';
 import { AppDispatch, RootState } from '../store';
 import { colors } from '../theme/colors';
 import { metrics } from '../theme/metrics';
-import { isErrorObject } from '../utils/error';
+import LoadingSpinner from './loading-spinner';
 
 const DEGRESS_CELSIUS = '°C';
 
@@ -26,74 +24,67 @@ export function WeatherData({ locationDetails, blocking = false }: Props): React
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(weatherActions.setWeatherDataPending(locationDetails));
-
-    fetchWeather(locationDetails)
-      .then((response) => {
-        dispatch(weatherActions.setWeatherDataSuccess({ locality: locationDetails, weatherResponse: response }));
-      })
-      .catch((e) => {
-  console.log(e);
-  const error = isErrorObject(e)?.message ?? 'Unknown error while retrieving weather data';
-
-        dispatch(weatherActions.setWeatherDataFailure({ locality: locationDetails, error }));
-      });
+    dispatch(lookUpWeather(locationDetails));
   }, [dispatch, locationDetails]);
 
   useEffect(() => {
-  if (blocking && weatherState == null) {
+  if (blocking && weatherState?.type === 'pending') {
       dispatch(GlobalLoaderActions.show());
- } else if (blocking && weatherState != null) {
+ } else if (blocking && weatherState?.type !== 'pending') {
       dispatch(GlobalLoaderActions.hide());
     }
-  }, [dispatch, blocking, weatherState]);
+  }, [dispatch, blocking, weatherState?.type]);
 
-  if (weatherState != null && weatherState.type === 'success') {
+  switch (weatherState?.type) {
+  case 'success': {
   return (
-      <View style={styles.container}>
-        <Text style={styles.cityText}>{`Today's weather in ` + weatherState.data.name + ` be like👇`}</Text>
-        <Text style={styles.dataText}>
-          Current temp: {weatherState.data.main.temp}
-          {DEGRESS_CELSIUS} but it feels like:{` `}
-          {weatherState.data.main.feels_like}
-          {DEGRESS_CELSIUS}
-        </Text>
-        <Text style={styles.dataText}>
-          Max temp: {weatherState.data.main.temp_max}
-          {DEGRESS_CELSIUS}
-        </Text>
-        <Text style={styles.dataText}>
-          Min temp: {weatherState.data.main.temp_min}
-          {DEGRESS_CELSIUS}
-        </Text>
-      </View>
-    );
-  } else if (weatherState?.type === 'pending') {
-    return (
-      <View
-        style={{
-          ...styles.container,
-          width: '100%',
-          alignSelf: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <LoadingSpinner size="small" />
-      </View>
-    );
-  } else {
-    return (
-      <View
-        style={{
-          ...styles.container,
-          width: '100%',
-          alignSelf: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Text>Loading error</Text>
-      </View>
-    );
+        <View style={styles.container}>
+          <Text style={styles.cityText}>{`Today's weather in ` + weatherState.data.name + ` be like👇`}</Text>
+          <Text style={styles.dataText}>
+            Current temp: {weatherState.data.main.temp}
+            {DEGRESS_CELSIUS} but it feels like:{` `}
+            {weatherState.data.main.feels_like}
+            {DEGRESS_CELSIUS}
+          </Text>
+          <Text style={styles.dataText}>
+            Max temp: {weatherState.data.main.temp_max}
+            {DEGRESS_CELSIUS}
+          </Text>
+          <Text style={styles.dataText}>
+            Min temp: {weatherState.data.main.temp_min}
+            {DEGRESS_CELSIUS}
+          </Text>
+        </View>
+      );
+    }
+    case undefined:
+    case 'pending': {
+      return (
+        <View
+          style={{
+            ...styles.container,
+            width: '100%',
+            alignSelf: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <LoadingSpinner size="small"  />
+        </View>
+      );
+    }
+    case 'failure': {
+      return (
+        <View
+          style={{
+            width: '100%',
+            alignSelf: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text>ERROR</Text>
+        </View>
+      );
+    }
   }
 }
 const styles = StyleSheet.create({

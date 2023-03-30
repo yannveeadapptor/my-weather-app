@@ -12,7 +12,7 @@ import { useIsMounted } from './utils/common-hooks';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider, useSelector } from 'react-redux';
-import { persistor, RootState, store } from './store';
+import { AppDispatch, persistor, RootState, store } from './store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Screen1 } from './views/screen1';
 import { Screen2 } from './views/screen2';
@@ -26,7 +26,7 @@ import { GlobalLoader } from './components/global-loader';
 import { GlobalLoaderActions } from './reducers/global-loader/reducer';
 import { useDispatch } from 'react-redux';
 import { getDeviceLocation, NO_LOCATION_PERMISSIONS_GRANTED } from './apis/location';
-import { locationActions } from './reducers/location/reducer';
+import { deviceLocation, locationActions } from './reducers/location/reducer';
 import { isErrorObject } from './utils/error';
 
 const Stack = createNativeStackNavigator<Tab1StackNavigatorParamList>();
@@ -102,30 +102,37 @@ function Tab2Stack() {
 
 function RootContainer() {
   const globalLoaderState = useSelector((state: RootState) => state.globalLoader);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    getDeviceLocation()
-      .then(async (location) => {
-  const loc = await dispatch(locationActions.setMyLocation(location.coords));
-  console.log(loc.payload);
-      })
-      .catch((e) => {
-  console.log(e);
-  const errorTitle = 'Error retrieving device location';
-  const error = isErrorObject(e);
-  if (error?.message === NO_LOCATION_PERMISSIONS_GRANTED) {
-          Alert.alert(
-            errorTitle,
-  'Location permissions have not been granted. Please add them in settings.'
-          );
- } else {
-          Alert.alert(
-            errorTitle,
-  `${error?.message ?? 'Unknown issue has occurred'}`
-          );
-        }
-      });
-  }, [dispatch]);
+
+
+const dispatch = useDispatch<AppDispatch>();
+useEffect(() => {
+  dispatch(deviceLocation());
+}, [dispatch]);
+
+//   const dispatch = useDispatch();
+//   useEffect(() => {
+//     getDeviceLocation()
+//       .then(async (location) => {
+//   const loc = await dispatch(locationActions.setMyLocation(location.coords));
+//   console.log(loc.payload);
+//       })
+//       .catch((e) => {
+//   console.log(e);
+//   const errorTitle = 'Error retrieving device location';
+//   const error = isErrorObject(e);
+//   if (error?.message === NO_LOCATION_PERMISSIONS_GRANTED) {
+//           Alert.alert(
+//             errorTitle,
+//   'Location permissions have not been granted. Please add them in settings.'
+//           );
+//  } else {
+//           Alert.alert(
+//             errorTitle,
+//   `${error?.message ?? 'Unknown issue has occurred'}`
+//           );
+//         }
+//       });
+//   }, [dispatch]);
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={{ headerShown: false }}>
