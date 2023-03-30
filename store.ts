@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
  import { combineReducers, configureStore } from '@reduxjs/toolkit';
  import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
+import { locationReducer } from './reducers/global-loader/location/reduce';
  
  import { globalLoaderReducer } from './reducers/global-loader/reducer';
  
@@ -11,8 +12,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  };
  
  const rootReducer = combineReducers({
-   globalLoader: globalLoaderReducer,
- });
+    globalLoader: globalLoaderReducer,
+    location: locationReducer,
+  });
  
  const persistedReducer = persistReducer(persistConfig, rootReducer);
  
